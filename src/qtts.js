@@ -2,7 +2,7 @@ const got = require('got')
 const CacheConf = require('cache-conf')
 
 // const URL = 'https://api.npms.io/v2/search'
-const URL = 'https://api.npms.io/v2/search'
+const URL = 'https://qusou.qutoutiao.net/quso/app/search'
 
 const RESULT_ITEMS = 10
 
@@ -28,16 +28,41 @@ module.exports.search = (query) => {
     return Promise.resolve(cachedResponse)
   }
 
-  return new Promise((resolve, reject) => (
-    got(URL, { json: true, query: { q: query, size: RESULT_ITEMS }, useElectronNet: false })
-      .then((response) => {
-        const data = response.body.results.map((result) => ({
-          id: result.package.name,
-          title: result.package.name,
-          value: result.package.links.npm,
-          subtitle: result.package.description
-        }))
+  // return new Promise((resolve, reject) => (
+  //   got(URL, { json: true, query: { q: query, size: RESULT_ITEMS }, useElectronNet: false })
+  //     .then((response) => {
+  //       const data = response.body.results.map((result) => ({
+  //         id: result.package.name,
+  //         title: result.package.name,
+  //         value: result.package.links.npm,
+  //         subtitle: result.package.description
+  //       }))
 
+  //       cache.set(cacheKey, data, { maxAge: CACHE_CONF.maxAge })
+
+  //       resolve(data)
+  //     })
+  //     .catch((err) => {
+  //       if (cachedResponse) {
+  //         resolve(cachedResponse)
+  //       }
+
+  //       reject(err)
+  //     })
+  // ))
+
+  return new Promise((resolve, reject) => (
+    got(URL, { json: true, query: { q: query, list: RESULT_ITEMS, page: 1 }, useElectronNet: false })
+      .then((response) => {
+        console.log(111, response, response.body)
+        const data = [
+          {
+            id: 'test',
+            title: 'test',
+            value: 'www.baidu.com',
+            subtitle: 'test',
+          }
+        ]
         cache.set(cacheKey, data, { maxAge: CACHE_CONF.maxAge })
 
         resolve(data)
@@ -46,7 +71,6 @@ module.exports.search = (query) => {
         if (cachedResponse) {
           resolve(cachedResponse)
         }
-
         reject(err)
       })
   ))

@@ -1,15 +1,15 @@
 const index = require('../../src/')
-const npms = require('../../src/npms')
+const qtts = require('../../src/qtts')
 
 describe('index.js', () => {
   beforeEach(() => {
-    npms.search = jest.fn()
+    qtts.search = jest.fn()
     index()('git-pick')
   })
 
   afterEach(() => jest.resetAllMocks())
 
-  test('call npms.search with "git-pick"', () => {
-    expect(npms.search).toBeCalledWith('git-pick')
+  test('call qtts.search with "git-pick"', () => {
+    expect(qtts.search).toBeCalledWith('git-pick')
   })
 })

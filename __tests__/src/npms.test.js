@@ -1,4 +1,4 @@
-describe('npmjs.js', () => {
+describe('qtts.js', () => {
   beforeEach(() => {
     jest.resetAllMocks()
     jest.resetModules()
@@ -6,7 +6,7 @@ describe('npmjs.js', () => {
 
   describe('search', () => {
     let got
-    let npms
+    let qtts
     let cache
 
     const mockResult = require('../../__mocks__/search.json').results.map((result) => ({
@@ -24,7 +24,7 @@ describe('npmjs.js', () => {
       cache = { get: jest.fn(), isExpired: jest.fn(), set: jest.fn() }
       require('cache-conf').mockImplementation(() => cache)
 
-      npms = require('../../src/npms')
+      qtts = require('../../src/qtts')
 
       got.mockImplementation(() => new Promise((resolve) => resolve({
         body: require('../../__mocks__/search.json')
@@ -32,7 +32,7 @@ describe('npmjs.js', () => {
     })
 
     test('call got with url and options', () => (
-      npms.search('git-pick')
+      qtts.search('git-pick')
         .then(() => {
           expect(got).toHaveBeenCalledWith(
             'https://api.npms.io/v2/search',
@@ -49,28 +49,28 @@ describe('npmjs.js', () => {
     ))
 
     test('returns an array', () => (
-      npms.search('git-pick')
+      qtts.search('git-pick')
         .then((packages) => {
           expect(packages).toBeInstanceOf(Array)
         })
       ))
 
     test('returns the expected id', () => (
-      npms.search('git-pick')
+      qtts.search('git-pick')
         .then((packages) => {
           expect(packages[0].id).toBe('@danielbayerlein/git-pick')
         })
       ))
 
     test('returns the expected title', () => (
-      npms.search('git-pick')
+      qtts.search('git-pick')
         .then((packages) => {
           expect(packages[0].title).toBe('@danielbayerlein/git-pick')
         })
       ))
 
     test('returns the expected value', () => (
-      npms.search('git-pick')
+      qtts.search('git-pick')
         .then((packages) => {
           expect(packages[0].value).toBe(
             'https://www.npmjs.com/package/%40danielbayerlein%2Fgit-pick'
@@ -79,7 +79,7 @@ describe('npmjs.js', () => {
       ))
 
     test('returns the expected subtitle', () => (
-      npms.search('git-pick')
+      qtts.search('git-pick')
         .then((packages) => {
           expect(packages[0].subtitle).toBe('git cherry-pick to multiple branches')
         })
@@ -93,14 +93,14 @@ describe('npmjs.js', () => {
         response: { body }
       })))
 
-      return npms.search('git-pick')
+      return qtts.search('git-pick')
         .catch((packages) => {
           expect(packages.response.body).toBe(body)
         })
     })
 
     test('call cache.get with the expected arguments', () => (
-      npms.search('git-pick')
+      qtts.search('git-pick')
         .then(() => {
           expect(cache.get).toBeCalledWith(
             'zazu-npms.git-pick',
@@ -110,7 +110,7 @@ describe('npmjs.js', () => {
     ))
 
     test('call cache.set with the expected arguments', () => (
-      npms.search('git-pick')
+      qtts.search('git-pick')
         .then(() => {
           expect(cache.set).toBeCalledWith(
             'zazu-npms.git-pick',
@@ -123,7 +123,7 @@ describe('npmjs.js', () => {
     test('call cache.isExpired with the expected argument', () => {
       cache.get = jest.fn(() => mockResult)
 
-      return npms.search('git-pick')
+      return qtts.search('git-pick')
         .then(() => {
           expect(cache.isExpired).toBeCalledWith('zazu-npms.git-pick')
         })
@@ -133,7 +133,7 @@ describe('npmjs.js', () => {
       cache.isExpired = jest.fn(() => false)
       cache.get = jest.fn(() => mockResult)
 
-      return npms.search('git-pick')
+      return qtts.search('git-pick')
         .then((packages) => {
           expect(packages).toEqual(mockResult)
         })
@@ -146,7 +146,7 @@ describe('npmjs.js', () => {
       // eslint-disable-next-line prefer-promise-reject-errors
       got.mockImplementation(() => new Promise((resolve, reject) => reject()))
 
-      return npms.search('git-pick')
+      return qtts.search('git-pick')
         .then((packages) => {
           expect(packages).toEqual(mockResult)
         })
@@ -156,8 +156,8 @@ describe('npmjs.js', () => {
   describe('integration', () => {
     jest.mock('cache-conf')
 
-    const npms = require('../../src/npms')
-    const searchResult = npms.search('git-pick')
+    const qtts = require('../../src/qtts')
+    const searchResult = qtts.search('git-pick')
 
     test('returns an array', () => (
       searchResult.then((packages) => {

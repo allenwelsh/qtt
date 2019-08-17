@@ -7,7 +7,7 @@ const URL = 'https://qusou.qutoutiao.net/quso/app/search'
 const RESULT_ITEMS = 10
 
 const CACHE_CONF = {
-  key: 'zazu-npms', // cache key prefix
+  key: 'zazu-qtts', // cache key prefix
   maxAge: 3600000 // 1 hour
 }
 
@@ -52,19 +52,16 @@ module.exports.search = (query) => {
   // ))
 
   return new Promise((resolve, reject) => (
-    got(URL, { json: true, query: { q: query, list: RESULT_ITEMS, page: 1 }, useElectronNet: false })
+    got(URL, { json: true, query: { query: query, list: RESULT_ITEMS, page: 1 }, useElectronNet: false })
       .then((response) => {
-        console.log(111, response, response.body)
-        const data = [
-          {
-            id: 'test',
-            title: 'test',
-            value: 'www.baidu.com',
-            subtitle: 'test',
-          }
-        ]
+        let items = response.body.result.items;
+        const data = items.map((result) => ({
+          id: result.name,
+          title: result.name,
+          value: result.url,
+          subtitle: result.owner
+        }))
         cache.set(cacheKey, data, { maxAge: CACHE_CONF.maxAge })
-
         resolve(data)
       })
       .catch((err) => {

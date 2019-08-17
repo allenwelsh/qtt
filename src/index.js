@@ -1,3 +1,3 @@
-const npms = require('./npms')
+const qtts = require('./qtts')
 
-module.exports = () => name => npms.search(name)
+module.exports = () => name => qtts.search(name)

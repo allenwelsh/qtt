@@ -1,14 +1,14 @@
 {
-  "name": "zazu-npms",
+  "name": "zazu-qtt",
   "version": "1.1.1",
-  "description": "Search for npm packages with npms.io",
+  "description": "Search for qtt",
   "icon": "icon.png",
   "blocks": {
     "input": [
       {
-        "id": "npms",
+        "id": "qtts",
         "type": "PrefixScript",
-        "prefix": "npm",
+        "prefix": "qtt",
         "space": true,
         "args": "Required",
         "script": "src/index.js",

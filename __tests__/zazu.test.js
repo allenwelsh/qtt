@@ -1,4 +1,4 @@
-const config = require('../zazu.json')
+const config = require('../zazu.json.js')
 
 describe('zazu.json', () => {
   test('is valid', () => {
